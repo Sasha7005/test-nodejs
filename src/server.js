@@ -3,40 +3,25 @@
 import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
-
 import { connectMongoDB } from './db/connectMongoDB.js';
 import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
-
-import { Student } from './models/student.js';
+import studentsRoutes from './routes/studentsRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
-// Глобальні middleware
-app.use(logger); // 1. Логер першим — бачить усі запити
-app.use(express.json()); // 2. Парсинг JSON-тіла
-app.use(cors()); // 3. Дозвіл для запитів з інших доменів
+// глобальні middleware
+app.use(logger);
+app.use(express.json());
+app.use(cors());
 
-// GET /students — список усіх студентів
-app.get('/students', async (req, res) => {
-  const students = await Student.find();
-  res.status(200).json(students);
-});
+// підключаємо групу маршрутів студента
+app.use(studentsRoutes);
 
-// GET /students/:studentId — один студент за id
-app.get('/students/:studentId', async (req, res) => {
-  const { studentId } = req.params;
-  const student = await Student.findById(studentId);
-  if (!student) {
-    return res.status(404).json({ message: 'Student not found' });
-  }
-  res.status(200).json(student);
-});
-
+// 404 і обробник помилок — наприкінці ланцюжка
 app.use(notFoundHandler);
-
 app.use(errorHandler);
 
 await connectMongoDB();
