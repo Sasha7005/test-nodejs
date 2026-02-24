@@ -9,6 +9,8 @@ import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import studentsRoutes from './routes/studentsRoutes.js';
 
+import { errors } from 'celebrate';
+
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
@@ -20,8 +22,9 @@ app.use(cors());
 // підключаємо групу маршрутів студента
 app.use(studentsRoutes);
 
-// 404 і обробник помилок — наприкінці ланцюжка
 app.use(notFoundHandler);
+app.use(errors());
+// глобальна обробка інших помилок
 app.use(errorHandler);
 
 await connectMongoDB();
