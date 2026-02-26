@@ -14,8 +14,11 @@ import {
   updateStudentSchema,
   studentIdParamSchema,
 } from '../validations/studentsValidation.js';
+import { getStudentsSchema } from '../validations/studentsValidation.js';
 
 const router = Router();
+
+router.get('/students', celebrate(getStudentsSchema), getStudents);
 
 router.get('/students', getStudents);
 router.get(

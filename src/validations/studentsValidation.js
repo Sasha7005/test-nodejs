@@ -3,6 +3,18 @@
 import { Joi, Segments } from 'celebrate';
 import { isValidObjectId } from 'mongoose';
 
+export const getStudentsSchema = {
+  [Segments.QUERY]: Joi.object({
+    page: Joi.number().integer().min(1),
+    perPage: Joi.number().integer().min(5).max(20),
+    gender: Joi.string().valid('male', 'female', 'other'),
+    minAvgMark: Joi.number().positive(),
+    sortBy: Joi.string().valid('_id', 'name', 'age', 'avgMark'),
+    sortOrder: Joi.string().valid('asc', 'desc'),
+    search: Joi.string().trim().allow(''),
+  }),
+};
+
 // Кастомний валідатор для ObjectId
 const objectIdValidator = (value, helpers) => {
   return !isValidObjectId(value) ? helpers.message('Invalid id format') : value;
