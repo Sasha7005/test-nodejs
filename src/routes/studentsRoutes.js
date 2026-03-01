@@ -16,12 +16,7 @@ import {
 } from '../validations/studentsValidation.js';
 import { getStudentsSchema } from '../validations/studentsValidation.js';
 
-import { registerUser } from '../controllers/authController.js';
-import { registerUserSchema } from '../validations/authValidation.js';
-
 const router = Router();
-
-router.post('/auth/register', celebrate(registerUserSchema), registerUser);
 
 router.get('/students', celebrate(getStudentsSchema), getStudents);
 
