@@ -3,6 +3,13 @@
 import { Joi, Segments } from 'celebrate';
 import { isValidObjectId } from 'mongoose';
 
+export const registerUserSchema = {
+  [Segments.BODY]: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).required(),
+  }),
+};
+
 export const getStudentsSchema = {
   [Segments.QUERY]: Joi.object({
     page: Joi.number().integer().min(1),
